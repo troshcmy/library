@@ -17,10 +17,17 @@ session_start();
     <?php include_once "../includes/header.php"; ?>
 
     <div class="container mt-3">
+    <?php
+    if (isset($_GET['success']) && $_GET['success'] === 'true') {
+    ?>
+        <div class="alert alert-success">
+            Book added successfully.
+        </div>
+    <?php
+    }
+    ?>
         <h2>Add New Book</h2>
-        <?php
-        if ($_SESSION['user_type'] == 'Admin') {
-        ?>
+        
             <form id="addBookForm" action="../backend/process_add_book.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title">Title:</label>
@@ -79,36 +86,10 @@ session_start();
                                 console.log("Response status:", response.status);
                                 return response.json();
                             })
-                            .then(data => {
-                                console.log("Data received:", data);
-
-                                if (data.status === "success") {
-                                    console.log("Book added successfully.");
-                                    alert("Book added successfully.");
-
-                                    // Добавим сообщение об успешном добавлении книги на страницу
-                                    var successMessage = document.createElement("div");
-                                    successMessage.innerHTML = "Book added successfully.";
-                                    successMessage.className = "alert alert-success";
-                                    form.appendChild(successMessage);
-
-                                    // Очистим форму
-                                    form.reset();
-                                } else {
-                                    console.error("Failed to add the book.", data.message);
-                                    alert("Failed to add the book. Please try again or contact the administrator.");
-                                }
-                            })
-                            .catch(error => {
-                                console.error("Fetch error:", error);
-                                alert("An error occurred while processing your request.");
-                            });
-                    }
+                        }          
                 });
             </script>
-        <?php
-        } // Close the if block properly
-        ?>
+        
     </div>
 
     <?php include_once "../includes/footer.php"; ?>

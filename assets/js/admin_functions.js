@@ -23,7 +23,17 @@ function handleSuccess(response) {
   } else {
       alert(response.message);
   }
+
+  // Добавим код для обновления информации в таблице BookStatus
+  if (response.action === 'borrow') {
+      // Получим данные для обновления
+      var bookId = response.bookId;
+
+      // Отправим AJAX-запрос для обновления информации в таблице BookStatus
+      sendAjaxRequest("../backend/update_book_status.php?book_id=" + bookId, handleSuccess, handleFailure);
+  }
 }
+
 
 function handleFailure() {
   alert("An error occurred. Please try again.");

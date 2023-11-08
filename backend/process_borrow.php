@@ -1,33 +1,59 @@
 <?php
+// borrow book action
+// borrow book action
+ini_set('display_errors', 1);
+
 session_start();
-include_once "../includes/db.php"; // Include your database connection file
+include_once "../includes/conn.php";
 
-if ($_SESSION['user_type'] == 'Admin' && isset($_GET['book_id'])) {
-    $bookId = $_GET['book_id'];
+// Set the correct Content-Type header for JSON
+header('Content-Type: application/json');
 
-    // Check the current status of the book
-    $query = "SELECT status FROM Books WHERE BookID = ?";
-    $stmt = $db->prepare($query);
-    $stmt->bind_param("i", $bookId);
-    $stmt->execute();
-    $stmt->bind_result($status);
-    $stmt->fetch();
-    $stmt->close();
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['book_id']) && is_numeric($_GET['book_id'])) {
+        $bookId = $_GET['book_id'];
 
-    // Toggle the status
-    $newStatus = ($status == 'Available') ? 'Borrowed' : 'Available';
+        // Check if the book is available
+        $checkBookQuery = "SELECT * FROM Books WHERE BookID = ? AND status = 'Available'";
+        $stmt = $db->prepare($checkBookQuery);
+        $stmt->bind_param("i", $bookId);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    // Update the status in the database
-    $updateQuery = "UPDATE Books SET status = ? WHERE BookID = ?";
-    $updateStmt = $db->prepare($updateQuery);
-    $updateStmt->bind_param("si", $newStatus, $bookId);
-    $updateStmt->execute();
-    $updateStmt->close();
+        if ($result->num_rows > 0) {
+            // Set book status to 'Onloan' in Books table
+            $borrowQuery = "UPDATE Books SET status = 'Onloan', StatusID = 2 WHERE BookID = ?";
+            $stmt = $db->prepare($borrowQuery);
+            $stmt->bind_param("i", $bookId);
+            $stmt->execute();
 
-    // Redirect back to the admin panel
-    header("Location: admin_panel.php");
-    exit();
+            // Get member ID from session
+            $member = isset($_SESSION['member_id']) ? $_SESSION['member_id'] : null;
+
+            // Debug output
+            error_log("Debug information: " . json_encode(['bookId' => $bookId, 'memberId' => $memberId]));
+
+
+            if ($member !== null) {
+                // Set DueDate (30 days from now)
+                $dueDate = date('Y-m-d', strtotime('+30 days'));
+
+                // Insert record into BookStatus table
+                $insertStatusQuery = "INSERT INTO BookStatus (BookID, MemberID, Status, DueDate) VALUES (?, ?, 'Onloan', ?)";
+                $stmt = $db->prepare($insertStatusQuery);
+                $stmt->bind_param("iss", $bookId, $member, $dueDate);
+                $stmt->execute();
+
+                echo json_encode(['status' => 'success', 'message' => 'Book borrowed successfully.']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Member ID not found.']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Book is not available for borrowing.']);
+        }
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid book ID.']);
+    }
 } else {
-    echo "You do not have permission to access this page.";
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
 }
-?>

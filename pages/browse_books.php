@@ -1,44 +1,45 @@
-<?php session_start(); ?>
+<?php
+ini_set('display_errors', 1);
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse and Borrow Books</title>
-</head>
-<body>
-    <?php include_once "../includes/header.php"; ?>
+session_start();
+include_once "../includes/conn.php";
 
-    <div class="container mt-3">
-        <h2>Browse and Borrow Books</h2>
-        <?php
-        // Include your database connection code here if not already included
-        $db = new mysqli('localhost', 'root', 'root', 'library_system');
+// Set the correct Content-Type header for JSON
+header('Content-Type: application/json');
 
-        // Query to get available books
-        $query = "SELECT * FROM Books WHERE BookID NOT IN (SELECT BookID FROM bookstatus WHERE Status = 'Onloan')";
-        $result = $db->query($query);
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['book_id'])) {
+        $bookId = $_GET['book_id'];
+
+        // Check if the book is available
+        $checkBookQuery = "SELECT * FROM Books WHERE BookID = ? AND status = 'Available'";
+        $stmt = $db->prepare($checkBookQuery);
+        $stmt->bind_param("i", $bookId);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<div>";
-                echo "<h3>" . $row['Title'] . "</h3>";
-                echo "<p>Author: " . $row['Author'] . "</p>";
-                echo "<p>Publisher: " . $row['Publisher'] . "</p>";
-                // Display a button for borrowing the book
-                echo "<form action=\"process_borrow.php\" method=\"POST\">";
-                echo "<input type=\"hidden\" name=\"book_id\" value=\"" . $row['BookID'] . "\">";
-                echo "<button type=\"submit\" class=\"btn btn-primary\">Borrow</button>";
-                echo "</form>";
-                echo "</div>";
-            }
-        } else {
-            echo "No available books.";
-        }
-        ?>
-    </div>
+            // Set book status to 'Onloan' in Books table
+            $borrowQuery = "UPDATE Books SET status = 'Onloan', StatusID = 2 WHERE BookID = ?";
+            $stmt = $db->prepare($borrowQuery);
+            $stmt->bind_param("i", $bookId);
+            $stmt->execute();
 
-    <?php include_once "../includes/footer.php"; ?>
-</body>
-</html>
+            // Calculate DueDate (30 days from now)
+            $dueDate = date('Y-m-d', strtotime('+30 days'));
+
+            // Insert a new record into BookStatus table with DueDate
+            $insertBookStatusQuery = "INSERT INTO BookStatus (BookID, StatusID, Status, DueDate) VALUES (?, 2, 'Onloan', ?)";
+            $stmt = $db->prepare($insertBookStatusQuery);
+            $stmt->bind_param("is", $bookId, $dueDate);
+            $stmt->execute();
+
+            echo json_encode(['status' => 'success', 'message' => 'Book borrowed successfully.', 'due_date' => $dueDate]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Book is not available for borrowing.']);
+        }
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid request.']);
+    }
+}
+?>

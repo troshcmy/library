@@ -20,38 +20,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    
-
-
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
 
-        
-
         if ($password === $row['PasswordMD5Hash']) {
-         
             $_SESSION['user_id'] = $row['MemberID'];
             $_SESSION['user_type'] = $row['MemberType'];
-            
-
-            
             $_SESSION['expires'] = time() + 2 * 3600;
 
-            
-            if ($_SESSION['user_type'] === 'Admin') {
+            // Set the session variables
+            $_SESSION['member_id'] = $row['MemberID'];
+            $_SESSION['member_email'] = $row['Email'];
+            $_SESSION['MemberType'] = $row['MemberType'];
+
+          
+
+
+            if ($_SESSION['user_type'] === 'Admin' || $_SESSION['user_type'] === 'Member') {
+                
                 header("Location: ../pages/admin_panel.php");
-            } else {
-                header("Location: ../pages/member_dashboard.php");
             }
             exit();
         } else {
-            
             echo "Incorrect password. Please try again.";
             echo "Email: " . $email . "<br>";
             echo "Password from form: " . $password . "<br>";
             echo "Password from database: " . $row['PasswordMD5Hash'] . "<br>";
         }
-        
     } else {
         // User not found
         echo "User not found. Please try again.";

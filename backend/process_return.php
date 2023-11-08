@@ -1,22 +1,37 @@
 <?php
+// return book action
+ini_set('display_errors', 1);
+
 session_start();
+include_once "../includes/conn.php";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $bookId = $_POST['BookID'];
-    $memberId = $_SESSION['MemberID']; // Assuming you have stored user_id in session
+// Set the correct Content-Type header for JSON
+header('Content-Type: application/json');
 
-    // Include your database connection code here if not already included
-    $db = new mysqli('localhost', 'root', 'root', 'library_system');
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['book_id'])) {
+        $bookId = $_GET['book_id'];
 
-    // Update the record in BookStatus
-    $updateQuery = "UPDATE bookstatus SET Status = 'Available', MemberID = NULL WHERE BookID = '$bookId' AND MemberID = '$memberId'";
-    $updateResult = $db->query($updateQuery);
+        // Check if the book is on loan
+        $checkBookQuery = "SELECT * FROM Books WHERE BookID = ? AND status = 'Onloan'";
+        $stmt = $db->prepare($checkBookQuery);
+        $stmt->bind_param("i", $bookId);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if ($updateResult) {
-        header("Location: dashboard.php"); // Redirect to dashboard or appropriate page
-        exit();
+        if ($result->num_rows > 0) {
+            // Set book status to 'Available' in Books table
+            $returnQuery = "UPDATE Books SET status = 'Available', StatusID = 1 WHERE BookID = ?";
+            $stmt = $db->prepare($returnQuery);
+            $stmt->bind_param("i", $bookId);
+            $stmt->execute();
+
+            echo json_encode(['status' => 'success', 'message' => 'Book returned successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Book is not available for return.']);
+        }
     } else {
-        echo "Failed to return the book.";
+        echo json_encode(['status' => 'error', 'message' => 'Invalid request.']);
     }
 }
 ?>
