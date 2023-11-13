@@ -4,10 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-  <!-- Include your custom CSS link -->
-  <link rel="stylesheet" href="../assets/css/style.css">
-
   <title>Library Management System</title>
 </head>
 
@@ -15,17 +11,35 @@
 
 
 
+    <footer class="footer mt-auto py-3">
 
-<footer>
-  
-  <footer class="footer mt-auto py-3 bg-light">
-    <div class="container text-center">
-        <span class="text-muted">Library Management System &copy; <?php echo date("Y"); ?></span>
-    
-</footer>
+      <div class="container d-md-flex py-4">
 
-  </div>
-</footer>
+        <div class="me-md-auto text-center ">
+          <div class="container text-center">
+            <p>Library Management System &copy;</p>
+
+          </div>
+        </div>
+        <ul>
+          <li>
+            <a href="https://www.x.com/"><img src="../images/social_media _cons/x-white.png" width="25" height="25" alt="twitter icon" title="send us tweets" /></a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/"><img src="../images/social_media _cons/iconfinder_1_Instagram_colored_svg_1_5296765.png" width="25" height="25" alt="instagram icon" title="send us tweets" /></a>
+          </li>
+          <li>
+            <a href="https://www.facebook.com/"><img src="../images/social_media _cons/iconfinder_1_Facebook_colored_svg_5296499.png" width="25" height="25" alt="facebook icon" title="follow us on Facebook" /></a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/"><img src="../images/social_media _cons/iconfinder_1_Youtube_colored_svg_5296521.png" width="25" height="25" alt="youtube icon" title="watch us on Youtube" /></a>
+          </li>
+
+
+        </ul>
+      </div>
+    </footer>
+ 
 
 
 

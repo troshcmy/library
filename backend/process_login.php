@@ -4,6 +4,8 @@
 
 ini_set('session.gc_maxlifetime', 3600);
 ini_set('session.cookie_lifetime', 2592000);
+
+
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -24,12 +26,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
 
         if ($password === $row['PasswordMD5Hash']) {
-            $_SESSION['user_id'] = $row['MemberID'];
+            $_SESSION['Member_id'] = $row['MemberID'];
             $_SESSION['user_type'] = $row['MemberType'];
             $_SESSION['expires'] = time() + 2 * 3600;
 
             // Set the session variables
-            $_SESSION['member_id'] = $row['MemberID'];
+            $_SESSION['Member_id'] = $row['MemberID'];
             $_SESSION['member_email'] = $row['Email'];
             $_SESSION['MemberType'] = $row['MemberType'];
 

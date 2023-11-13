@@ -1,10 +1,6 @@
 <?php
 session_start();
 
-// Debug output
-// echo "User ID: " . $_SESSION['member_id'] . "<br>";
-// echo "User Email: " . $_SESSION['member_email'] . "<br>";
-// echo "User Type: " . $_SESSION['MemberType'] . "<br>";
 
 include_once "../includes/conn.php"; // Include your database connection file
 
@@ -20,8 +16,7 @@ $result = $db->query($query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="./style.css">
+
 
     <!-- Common AJAX function -->
     <script src="../assets/js/admin_functions.js"></script>
@@ -77,24 +72,31 @@ $result = $db->query($query);
 </head>
 
 <body>
-    <div class="container inner-wraper">
-    <?php include_once "../includes/header.php"; ?>
 
-    <div class="container mt-3 books">
-        <?php
-        // Check if the user is logged in
-        if (isset($_SESSION['user_type'])) {
-            // Display different content based on user type
-            echo "<h2>";
-            if ($_SESSION['user_type'] == 'Admin') {
-                echo "Admin";
-                // Display admin-specific functions
-                echo "<a href=\"add_book.php\" class=\"btn btn-primary\">Add New Book</a>";
-            }
-            echo "</h2>";
+    <div class="inner-wraper">
 
-            // Display list of books
-            echo "<table class='table'>
+
+        <div class="container ">
+            <?php include_once "../includes/header.php"; ?>
+
+            <?php
+            echo "<h1>Admin Panel</h1>";
+            echo "<div class=\"mt-3 books\">";
+            // Check if the user is logged in
+            if (isset($_SESSION['user_type'])) {
+                // Display different content based on user type
+                echo "<h2>";
+                if ($_SESSION['user_type'] == 'Admin') {
+                    echo "Admin";
+                    // Display admin-specific functions
+                    echo "<a href=\"add_book.php\" class=\"btn btn-primary\">Add New Book</a>";
+                }
+                echo "</h2>";
+
+                // Display list of books
+
+                echo "<div class=mt-3 flex-grow-1><table class='table'>
+            
                         <thead>
                             <tr>
                                 <th>BookID</th>
@@ -106,48 +108,60 @@ $result = $db->query($query);
                                 <th>Action</th>
                             </tr>
                         </thead>
+                        </div> 
                         <tbody>";
 
-            // Loop through the result set and display book information
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>
+                // Loop through the result set and display book information
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>
                     <td>{$row['BookID']}</td>
                     <td>{$row['Title']}</td>
                     <td>{$row['Author']}</td>
                     <td>{$row['Publisher']}</td>
-                    <td><img src='../images/{$row['ImagePath']}' alt='{$row['Title']}' style='width: 150px; height: auto;'></td>
+                    <td><img src='../images/{$row['ImagePath']}' alt='{$row['Title']}' style='width: 200px; height: 300px;'></td>
                     <td>{$row['status']}</td>
                     
                     <td>";
 
-                // Display Borrow and Return buttons for Members
-                if ($_SESSION['user_type'] == 'Member' && $row['status'] == 'Available') {
-                    echo "<button class='btn btn-success' onclick='manageBook({$row['BookID']}, \"borrow\")'>Borrow</button>";
-                } elseif ($_SESSION['user_type'] == 'Member' && $row['status'] == 'Onloan') {
-                    echo "<button class='btn btn-warning' onclick='manageBook({$row['BookID']}, \"return\")'>Return</button>";
-                }
+                    // Display Borrow and Return buttons for Members
+                    if ($_SESSION['user_type'] == 'Member' && $row['status'] == 'Available') {
+                        echo "<button class='btn btn-success' onclick='manageBook({$row['BookID']}, \"borrow\")'>Borrow</button>";
+                    } elseif ($_SESSION['user_type'] == 'Member' && $row['status'] == 'Onloan') {
+                        echo "<button class='btn btn-warning' onclick='manageBook({$row['BookID']}, \"return\")'>Return</button>";
+                    }
 
-                // Display Edit and Delete buttons for Admin
-                if ($_SESSION['user_type'] == 'Admin') {
-                    echo "<button class='btn btn-info' onclick='editBook({$row['BookID']})'>Edit</button>
+                    // Display Edit and Delete buttons for Admin
+                    if ($_SESSION['user_type'] == 'Admin') {
+                        echo "<button class='btn btn-info' onclick='editBook({$row['BookID']})'>Edit</button>
                         <button class='btn btn-danger' onclick='deleteBook({$row['BookID']})'>Delete</button>";
-                }
+                    }
 
-                echo "</td></tr>";
+                    echo "</td></tr>";
+                }
+            } else {
+                // Display a message for users who are not logged in
+                echo "You do not have permission to access this page.";
             }
 
-            echo "</tbody></table>";
-        } else {
-            // Display a message for users who are not logged in
-            echo "You do not have permission to access this page.";
-        }
-        ?>
-    </div>
+
+
+            echo "</tbody></table></div>";
+            ?>
+
+
+
+
+        </div>
+        
 
     
-    </div>
-    <?php include_once "../includes/footer.php"; ?>
-</body>
 
+    </div>
+ </div>
+    <?php include_once "../includes/footer.php"; ?>
+
+
+    <!-- Include footer -->
+</body>
 
 </html>

@@ -1,5 +1,4 @@
 <?php
-// return book action
 ini_set('display_errors', 1);
 
 session_start();
@@ -9,29 +8,48 @@ include_once "../includes/conn.php";
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (isset($_GET['book_id'])) {
+    if (isset($_GET['book_id']) && is_numeric($_GET['book_id'])) {
         $bookId = $_GET['book_id'];
 
-        // Check if the book is on loan
-        $checkBookQuery = "SELECT * FROM Books WHERE BookID = ? AND status = 'Onloan'";
-        $stmt = $db->prepare($checkBookQuery);
-        $stmt->bind_param("i", $bookId);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        // Get member ID from session
+        $member = isset($_SESSION['Member_id']) ? $_SESSION['Member_id'] : null;
 
-        if ($result->num_rows > 0) {
-            // Set book status to 'Available' in Books table
-            $returnQuery = "UPDATE Books SET status = 'Available', StatusID = 1 WHERE BookID = ?";
-            $stmt = $db->prepare($returnQuery);
-            $stmt->bind_param("i", $bookId);
+        if ($member !== null) {
+            // Check if the book is on loan
+            $checkBookQuery = "SELECT * FROM BookStatus WHERE BookID = ? AND MemberID = ? AND Status = 'Onloan'";
+            $stmt = $db->prepare($checkBookQuery);
+            $stmt->bind_param("ii", $bookId, $member);
             $stmt->execute();
+            $result = $stmt->get_result();
 
-            echo json_encode(['status' => 'success', 'message' => 'Book returned successfully.']);
+            if ($result->num_rows > 0) {
+                // Update book status to 'Available' in Books table
+                $returnQuery = "UPDATE Books SET status = 'Available', StatusID = 1 WHERE BookID = ?";
+                $stmt = $db->prepare($returnQuery);
+                $stmt->bind_param("i", $bookId);
+                $stmt->execute();
+
+                // Update record in BookStatus table to 'Returned'
+                $updateStatusQuery = "UPDATE BookStatus SET Status = 'Returned' WHERE BookID = ? AND MemberID = ?";
+                $stmt = $db->prepare($updateStatusQuery);
+                $stmt->bind_param("ii", $bookId, $member);
+                $stmt->execute();
+
+                // Debug output
+                error_log("Debug information: " . json_encode(['BookId' => $bookId, 'MemberId' => $member]));
+
+                echo json_encode(['status' => 'success', 'message' => 'Book returned successfully.']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Book is not on loan for the current member.']);
+            }
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Book is not available for return.']);
+            echo json_encode(['status' => 'error', 'message' => 'Member ID not found.']);
         }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Invalid request.']);
+        echo json_encode(['status' => 'error', 'message' => 'Invalid book ID.']);
     }
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
 }
+
 ?>
