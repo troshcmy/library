@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['search_query'])) {
     $searchResult = $db->query($searchResultQuery);
 } else {
     // If no search query is set, redirect to the main page
-    
+    header("Location: ./login.php");
     exit();
 }
 ?>

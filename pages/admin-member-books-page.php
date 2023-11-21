@@ -7,6 +7,11 @@ session_start();
 
 include_once "../includes/conn.php"; // Include your database connection file
 
+if(!isset($_SESSION['user_type'])) {
+    header("Location: ./login.php");
+    exit();
+}
+
 // Fetch books from the database
 $query = "SELECT BookID, Title, Author, Publisher, ImagePath, status FROM Books";
 $result = $db->query($query);
