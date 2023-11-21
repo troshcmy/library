@@ -35,7 +35,7 @@ session_start();
                 <!-- Your hero content goes here -->
                 <h1>Welcome to Our Library</h1>
                 <p>Explore a world of knowledge with our vast collection of books and audiobooks.</p>
-                <a href="./admin_panel.php" class="btn btn-primary">Explore Now</a>
+                <a href="./books.php" class="btn btn-primary">Explore Now</a>
             </div>
         </div>
     </section>
@@ -52,41 +52,47 @@ session_start();
                 <!-- Book 1 -->
                 <div class="col-xs-6 col-sm-6 col-md-4 mb-4">
                     <div class="card">
-                        <img src="../images/61jgm6ooXzL._AC_UF1000,1000_QL80_.jpg" class="card-img-top" alt="Fantasy Book 1">
-                        <div class="card-body">
-                            <h5 class="card-title">The Philosopher's Stone</h5>
-                            <p class="card-text">J.K. Rowling</p>
-                            <a href="#" class="btn btn-primary">Details</a>
-                        </div>
-
+                        <div class="inner-card"> <!-- Add this line -->
+                            <img src="../images/61jgm6ooXzL._AC_UF1000,1000_QL80_.jpg" class="card-img-top" alt="Fantasy Book 1">
+                            <div class="card-body">
+                                <h5 class="card-title">The Philosopher's Stone</h5>
+                                <p class="card-text">J.K. Rowling</p>
+                                <a href="./admin-member-books-page.php" class="btn btn-primary">Details</a>
+                            </div>
+                        </div> <!-- Add this line -->
                     </div>
                 </div>
                 <!-- Book 2 -->
                 <div class="col-xs-6 col-sm-6 col-md-4 mb-4">
                     <div class="card">
-                        <img src="../images/The_Fellowship_of_the_Ring_cover.gif" class="card-img-top" alt="The Lord of The Rings">
-                        <div class="card-body">
-                            <h5 class="card-title">The Fellowship of the Ring</h5>
-                            <p class="card-text">J.R.R. Tolkien</p>
-                            <a href="#" class="btn btn-primary ">Details</a>
-                        </div>
+                        <div class="inner-card"> <!-- Add this line -->
+                            <img src="../images/The_Fellowship_of_the_Ring_cover.gif" class="card-img-top" alt="The Lord of The Rings">
+                            <div class="card-body">
+                                <h5 class="card-title">The Fellowship of the Ring</h5>
+                                <p class="card-text">J.R.R. Tolkien</p>
+                                <a href="./admin-member-books-page.php" class="btn btn-primary ">Details</a>
+                            </div>
+                        </div> <!-- Add this line -->
                     </div>
                 </div>
 
                 <!-- Book 3 -->
                 <div class="col-md-4 mb-4">
                     <div class="card">
-                        <img src="../images/Harry_Potter_and_the_Prisoner_of_Azkaban.jpg" class="card-img-top" alt="Fantasy Book 3">
-                        <div class="card-body">
-                            <h5 class="card-title">Harry Potter and the Prisoner of Azkaban</h5>
-                            <p class="card-text">J.K. Rowling</p>
-                            <a href="#" class="btn btn-primary">Details</a>
-                        </div>
+                        <div class="inner-card"> <!-- Add this line -->
+                            <img src="../images/Harry_Potter_and_the_Prisoner_of_Azkaban.jpg" class="card-img-top" alt="Fantasy Book 3">
+                            <div class="card-body">
+                                <h5 class="card-title">Harry Potter and the Prisoner of Azkaban</h5>
+                                <p class="card-text">J.K. Rowling</p>
+                                <a href="./admin-member-books-page.php" class="btn btn-primary">Details</a>
+                            </div>
+                        </div> <!-- Add this line -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
 
 
     <section class="library-description">
@@ -123,7 +129,7 @@ session_start();
                         <div class="card-body">
                             <h5 class="card-title">The Hound of the Baskervilles</h5>
                             <p class="card-text">Arthur Conan Doyle</p>
-                            <a href="#" class="btn btn-primary">Details</a>
+                            <a href="./books.php" class="btn btn-primary">Details</a>
                         </div>
                     </div>
                 </div>
@@ -134,7 +140,7 @@ session_start();
                         <div class="card-body">
                             <h5 class="card-title">Gone Girl</h5>
                             <p class="card-text">Gillian Flynn</p>
-                            <a href="#" class="btn btn-primary">Details</a>
+                            <a href="./books.php" class="btn btn-primary">Details</a>
                         </div>
                     </div>
                 </div>
@@ -145,7 +151,7 @@ session_start();
                         <div class="card-body">
                             <h5 class="card-title">The Da Vinci Code</h5>
                             <p class="card-text">Dan Brown</p>
-                            <a href="#" class="btn btn-primary">Details</a>
+                            <a href="./books.php" class="btn btn-primary">Details</a>
                         </div>
                     </div>
                 </div>
@@ -186,7 +192,7 @@ session_start();
                         <div class="card-body text-center">
                             <h5 class="card-title">Dune</h5>
                             <p class="card-text">Frank Herbert</p>
-                            <a href="#" class="btn btn-primary">Details</a>
+                            <a href="./books.php" class="btn btn-primary">Details</a>
                         </div>
                     </div>
                 </div>
@@ -197,7 +203,7 @@ session_start();
                         <div class="card-body">
                             <h5 class="card-title">Ender's Game</h5>
                             <p class="card-text">Orson Scott Card</p>
-                            <a href="#" class="btn btn-primary">Details</a>
+                            <a href="./books.php" class="btn btn-primary">Details</a>
                         </div>
                     </div>
                 </div>
@@ -208,7 +214,7 @@ session_start();
                         <div class="card-body">
                             <h5 class="card-title">The Hitchhiker's Guide to the Galaxy</h5>
                             <p class="card-text">Douglas Adams</p>
-                            <a href="#" class="btn btn-primary">Details</a>
+                            <a href="./books.php" class="btn btn-primary">Details</a>
                         </div>
                     </div>
                 </div>

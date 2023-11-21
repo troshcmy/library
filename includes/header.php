@@ -24,7 +24,15 @@ $loggedIn = isset($_SESSION['user_type']) ? $_SESSION['user_type'] == 'Admin' ||
     <!-- Bootstrap and related scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <!-- other head elements -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+
+
 </head>
+
+
 
 <body>
 
@@ -34,7 +42,7 @@ $loggedIn = isset($_SESSION['user_type']) ? $_SESSION['user_type'] == 'Admin' ||
             <div class="fixed-top container-fluid header">
                 <!-- Burger button always visible -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span  class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <!-- Navbar brand -->
@@ -44,32 +52,23 @@ $loggedIn = isset($_SESSION['user_type']) ? $_SESSION['user_type'] == 'Admin' ||
                 <div class="collapse navbar-collapse text-center" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link " aria-current="page" href="../pages/index.php">
-                                <i class="bi bi-house-door"></i> HOME
-                            </a>
+                            <a class="nav-link" id="home-link" href="../pages/index.php">HOME</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../pages/admin_panel.php">
-                                <i class="bi bi-book"></i>BOOKS
-                            </a>
+                            <?php
+                            if (isset($_SESSION['user_type'])) {
+                                echo '<a class="nav-link" id="books-link" href="../pages/admin-member-books-page.php">BOOKS</a>';
+                            } else {
+                                echo '<a class="nav-link" id="books-link" href="../pages/books.php">BOOKS</a>';
+                            }
+                            ?>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="bi bi-person"></i> ABOUT US
-                            </a>
+                            <a class="nav-link" id="about-link" href="../pages/about.php">ABOUT US</a>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="bi bi-headphones"></i> AUDIOBOOKS
-                            </a>
-                        </li> -->
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="bi bi-journals"></i> BLOG
-                            </a>
+                            <a class="nav-link" id="contact-link" href="../pages/contact.php">CONTACT US</a>
                         </li>
-
-
                     </ul>
                     <form class="d-flex" action="../pages/search.php" method="GET">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search_query">
@@ -80,15 +79,15 @@ $loggedIn = isset($_SESSION['user_type']) ? $_SESSION['user_type'] == 'Admin' ||
                             <?php if ($loggedIn) : ?>
                                 <li class="nav-item">
                                     <form method="post">
-                                        <button type="submit" class="btn btn-link logout" name="logout">
+                                        <button type="submit" class=" btn-link logout text-white" name="logout">
                                             <i class="bi bi-box-arrow-right"></i> Logout
                                         </button>
                                     </form>
                                 </li>
-                                <?php else : ?>
+                            <?php else : ?>
                                 <li class="nav-item">
-                                    <a class="nav-link login" href="../pages/login.php">
-                                        <i class="bi bi-box-arrow-in-right"></i> Log in
+                                    <a class="nav-link login text-white" href="../pages/login.php">
+                                        <i class="bi bi-person-fill"></i> Login
                                     </a>
                                 </li>
                             <?php endif; ?>
@@ -97,6 +96,22 @@ $loggedIn = isset($_SESSION['user_type']) ? $_SESSION['user_type'] == 'Admin' ||
                 </div>
             </div>
         </nav>
+        <script>
+            // Get the current page URL
+            var currentPageUrl = window.location.href;
+
+            // Get the navigation links
+            var navLinks = document.getElementsByClassName('nav-link');
+
+            // Loop through the navigation links
+            for (var i = 0; i < navLinks.length; i++) {
+                // If the navigation link URL matches the current page URL
+                if (navLinks[i].href === currentPageUrl) {
+                    // Add the "active" class to the navigation link
+                    navLinks[i].classList.add('active');
+                }
+            }
+        </script>
     </header>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

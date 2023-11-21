@@ -1,5 +1,6 @@
 <?php
 ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 session_start();
 include_once "../includes/conn.php";
@@ -14,11 +15,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // Get member ID from session
         $member = isset($_SESSION['Member_id']) ? $_SESSION['Member_id'] : null;
 
-        if ($member !== null) {
+        // Check if the user is an admin
+        $isAdmin = isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Admin';
+
+        if ($member !== null || $isAdmin) {
             // Check if the book is on loan
-            $checkBookQuery = "SELECT * FROM BookStatus WHERE BookID = ? AND MemberID = ? AND Status = 'Onloan'";
+            $checkBookQuery = "SELECT * FROM BookStatus WHERE BookID = ? AND Status = 'Onloan'";
+            
+            // If the user is an admin, don't check for MemberID
+            if (!$isAdmin) {
+                $checkBookQuery .= " AND MemberID = ?";
+            }
+            
             $stmt = $db->prepare($checkBookQuery);
-            $stmt->bind_param("ii", $bookId, $member);
+
+            if (!$isAdmin) {
+                $stmt->bind_param("ii", $bookId, $member);
+            } else {
+                $stmt->bind_param("i", $bookId);
+            }
+
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -30,26 +46,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $stmt->execute();
 
                 // Update record in BookStatus table to 'Returned'
-                $updateStatusQuery = "UPDATE BookStatus SET Status = 'Returned' WHERE BookID = ? AND MemberID = ?";
+                $updateStatusQuery = "UPDATE BookStatus SET Status = 'Returned', DueDate = NULL WHERE BookID = ?";
+                if (!$isAdmin) {
+                    $updateStatusQuery .= " AND MemberID = ?";
+                }
+                
                 $stmt = $db->prepare($updateStatusQuery);
-                $stmt->bind_param("ii", $bookId, $member);
+                
+                if (!$isAdmin) {
+                    $stmt->bind_param("ii", $bookId, $member);
+                } else {
+                    $stmt->bind_param("i", $bookId);
+                }
+
                 $stmt->execute();
 
-                // Debug output
-                error_log("Debug information: " . json_encode(['BookId' => $bookId, 'MemberId' => $member]));
+                // If the user is an admin, update the status in the Books table
+                if ($isAdmin) {
+                    $updateQuery = "UPDATE Books SET status = 'Available' WHERE BookID = ?";
+                    $stmt = $db->prepare($updateQuery);
+                    $stmt->bind_param("i", $bookId);
+                    $stmt->execute();
+                }
 
-                echo json_encode(['status' => 'success', 'message' => 'Book returned successfully.']);
+                echo json_encode(['status' => 'success']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Book is not on loan for the current member.']);
+                echo json_encode(['status' => 'error']);
             }
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Member ID not found.']);
+            echo json_encode(['status' => 'error']);
         }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Invalid book ID.']);
+        echo json_encode(['status' => 'error']);
     }
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
+    echo json_encode(['status' => 'error']);
 }
-
 ?>

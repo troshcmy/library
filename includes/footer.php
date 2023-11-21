@@ -11,11 +11,11 @@
 
 
 
-    <footer class="footer mt-auto py-3">
+    <footer class="footer mt-auto">
 
-      <div class="container d-md-flex py-4">
+      <div class="container d-md-flex">
 
-        <div class="me-md-auto text-center ">
+        <div class="me-md-auto text-center py-2 ">
           <div class="container text-center">
             <p>Library Management System &copy;</p>
 

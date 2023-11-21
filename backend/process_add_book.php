@@ -1,8 +1,4 @@
 <?php
-
-session_start();
-
-// Проверяем права доступа
 // if ($_SESSION['user_type'] !== 'Admin') {
 //   http_response_code(403);
 //   echo json_encode(['status' => 'error', 'message' => 'Permission denied']);
@@ -27,42 +23,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imageName = basename($image['name']);
     $imagePath = $uploadDirectory . $imageName;
 
-    // Проверка ошибок при сохранении изображения
-    if (!move_uploaded_file($image['tmp_name'], $imagePath)) {
-        echo 'Possible file upload attack!';
-        echo 'Here is some more debugging info:';
-        print_r($_FILES);
-        exit(); // Добавьте это, чтобы скрипт завершал выполнение после вывода сообщения об ошибке
-    }
+    // Check if image upload is successful
+    if (move_uploaded_file($image['tmp_name'], $imagePath)) {
+        // Image upload is successful
+        // Start transaction
+        $db->begin_transaction();
 
-    // Начало транзакции
-    $db->begin_transaction();
+        try {
+            // Save book information to Books table
+            $query = "INSERT INTO Books (Title, Author, Publisher, Language, Category, ImagePath, status, StatusID) VALUES (?, ?, ?, ?, ?, ?, 'Available', 1)";
+            $stmt = $db->prepare($query);
+            $stmt->bind_param('ssssss', $title, $author, $publisher, $language, $category, $imageName);
 
-    try {
-        // Если изображение успешно загружено, сохраняем информацию в таблицу Books
-        $query = "INSERT INTO Books (Title, Author, Publisher, Language, Category, ImagePath, status, StatusID) VALUES (?, ?, ?, ?, ?, ?, 'Available', 1)";
-        $stmt = $db->prepare($query);
-        $stmt->bind_param('ssssss', $title, $author, $publisher, $language, $category, $imageName);
+            // ... (your validation and checks code)
 
-        // ... (ваш код валидации и проверок)
-
-        // Выполняем запрос на добавление данных в базу данных
-        if ($stmt->execute()) {
-            $db->commit();
-
-            // Выполняем редирект на вашу страницу с формой
-            header("Location: ../pages/add_book.php?success=true");
-            exit();
-        } else {
+            if ($stmt->execute()) {
+                $db->commit();
+                // Redirect with success parameter
+                header("Location: ../pages/add_book.php?success=true");
+                exit();
+            } else {
+                // Rollback transaction if insert fails
+                $db->rollback();
+                // Redirect with error parameter
+                header("Location: ../pages/add_book.php?success=false");
+                exit();
+            }
+        } catch (Exception $e) {
+            // Rollback transaction if there's an error
             $db->rollback();
-            $errorMessage = 'Database execution failed: ' . $stmt->error;
-            error_log($errorMessage);
-            echo json_encode(['status' => 'error', 'message' => $errorMessage]);
+            // Redirect with error parameter
+            header("Location: ../pages/add_book.php?success=false&message=" . urlencode("Error: " . $e->getMessage()));
+            exit();
         }
-    } catch (mysqli_sql_exception $e) {
-        $db->rollback();
-        error_log('An error occurred: ' . $e->getMessage());
-        echo json_encode(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()]);
+    } else {
+        // Image upload failed
+        // Redirect with error parameter
+        header("Location: ../pages/add_book.php?success=false&message=" . urlencode("Error uploading image"));
+        exit();
     }
 }
 ?>

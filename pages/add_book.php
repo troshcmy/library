@@ -17,17 +17,15 @@ session_start();
     <?php include_once "../includes/header.php"; ?>
 
     <div class="container mt-3">
-    <?php
-    if (isset($_GET['success']) && $_GET['success'] === 'true') {
-    ?>
-        <div class="alert alert-success">
-            Book added successfully.
-        </div>
-    <?php
-    }
-    ?>
-        <h2>Add New Book</h2>
-        
+
+
+        <div class="row inner-wraper ">
+
+
+
+            <h2 class="center">Add New Book</h2>
+
+
             <form id="addBookForm" action="../backend/process_add_book.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title">Title:</label>
@@ -54,7 +52,9 @@ session_start();
                     <select class="form-control" id="category" name="category">
                         <option value="Fiction">Fiction</option>
                         <option value="Nonfiction">Nonfiction</option>
-                        <option value="Reference">Reference</option>
+                        <option value="Reference">Fantasy</option>
+                        <option value="Reference">Mystery</option>
+                        <option value="Reference">Science Fiction</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -68,28 +68,30 @@ session_start();
             <div id="notification"></div> <!-- This div will display notifications -->
             <div id="errorMessages" style="color: red;"></div>
 
+            <?php
+            // Check for success or error parameters in the URL
+            $successParam = isset($_GET['success']) ? $_GET['success'] : null;
+            $messageParam = isset($_GET['message']) ? urldecode($_GET['message']) : null;
+
+            // Display alert based on success or error parameter
+            if ($successParam !== null) {
+                echo "<script>";
+                if ($successParam === 'true') {
+                    echo "alert('Book added successfully!');";
+                    // Optionally, you can redirect the user to another page or perform other actions
+                } else {
+                    // Display error message if the book was not added
+                    echo "document.getElementById('errorMessages').innerHTML = 'Error: " . $messageParam . "';";
+                }
+                echo "</script>";
+            }
+            ?>
+
             <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
             <script src="../assets/js/add_book_validation.js"></script>
-            <script>
-                document.getElementById("addBookForm").addEventListener("submit", function (event) {
-                    event.preventDefault(); // Предотвращаем стандартную отправку формы
+            
 
-                    if (validateForm()) {
-                        var form = event.target;
-                        var formData = new FormData(form);
-
-                        fetch("./backend/process_add_book.php", {
-                                method: "POST",
-                                body: formData
-                            })
-                            .then(response => {
-                                console.log("Response status:", response.status);
-                                return response.json();
-                            })
-                        }          
-                });
-            </script>
-        
+        </div>
     </div>
 
     <?php include_once "../includes/footer.php"; ?>

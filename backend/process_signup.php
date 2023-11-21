@@ -16,8 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $firstName = $_POST['first_name'];
     $lastName = $_POST['last_name'];
     $email = $_POST['email'];
-    $password = md5($_POST['password']); // Hash the password
-
+    $password = $_POST['password'];
 
     // Example validation: Check if email already exists
     $emailExistsQuery = "SELECT COUNT(*) FROM User WHERE Email = ?";
@@ -33,24 +32,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($emailCount > 0) {
             echo "Email address is already associated with a user.";
         } else {
+            // Hash the password using password_hash
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
             // Insert data into the database
-            $insertQuery = "INSERT INTO User (MemberType, FirstName, LastName, Email, PasswordMD5Hash) VALUES (?, ?, ?, ?, ?)";
+            $insertQuery = "INSERT INTO User (MemberType, FirstName, LastName, Email, PasswordHash) VALUES (?, ?, ?, ?, ?)";
 
             // Use prepared statement for better security
             if ($stmt = $conn->prepare($insertQuery)) {
                 $memberType = "Member"; // Set the member type here
-                $stmt->bind_param("sssss", $memberType, $firstName, $lastName, $email, $password);
+                $stmt->bind_param("sssss", $memberType, $firstName, $lastName, $email, $hashedPassword);
                 if ($stmt->execute()) {
-                    echo "User registration successful!";
+                    // User registration successful
+                    echo json_encode(['success' => true, 'message' => 'User registration successful!']);
                 } else {
-                    echo "User registration failed. Please try again.";
+                    // User registration failed
+                    echo json_encode(['success' => false, 'message' => 'User registration failed. Please try again.']);
                 }
                 $stmt->close();
             }
         }
     }
 
-    // Close the connection Admin1992!
+    // Close the connection
     $conn->close();
 }
-?>

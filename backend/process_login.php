@@ -1,16 +1,13 @@
 <?php
 
-// Admin1992!
-
 ini_set('session.gc_maxlifetime', 3600);
 ini_set('session.cookie_lifetime', 2592000);
-
 
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['Email'];
-    $password = md5($_POST['PasswordMD5Hash']);
+    $enteredPassword = $_POST['PasswordMD5Hash']; // Assuming this is the hashed password from the form
 
     // Include your database connection code here if not already included
     $db = new mysqli('localhost', 'root', 'root', 'library_system');
@@ -24,8 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
+        $storedHashedPassword = $row['PasswordHash'];
 
-        if ($password === $row['PasswordMD5Hash']) {
+        // Verify the entered password against the stored hashed password
+        if (password_verify($enteredPassword, $storedHashedPassword)) {
             $_SESSION['Member_id'] = $row['MemberID'];
             $_SESSION['user_type'] = $row['MemberType'];
             $_SESSION['expires'] = time() + 2 * 3600;
@@ -35,22 +34,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['member_email'] = $row['Email'];
             $_SESSION['MemberType'] = $row['MemberType'];
 
-          
-
-
             if ($_SESSION['user_type'] === 'Admin' || $_SESSION['user_type'] === 'Member') {
-                
-                header("Location: ../pages/admin_panel.php");
-            }
+                header("Location: ../pages/admin-member-books-page.php");
+            } 
             exit();
         } else {
             echo "Incorrect password. Please try again.";
-            echo "Email: " . $email . "<br>";
-            echo "Password from form: " . $password . "<br>";
-            echo "Password from database: " . $row['PasswordMD5Hash'] . "<br>";
         }
     } else {
         // User not found
         echo "User not found. Please try again.";
     }
+
+    $stmt->close();
+    $db->close();
 }
+?>
