@@ -2,19 +2,16 @@
 session_start();
 include_once "../includes/conn.php";
 
-// Проверяем, является ли пользователь администратором
-$isAdmin = isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'Admin';
-
-// Проверяем, был ли отправлен запрос на поиск
+// Check if the search query is set
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['search_query'])) {
     $searchQuery = $_GET['search_query'];
 
-    // Выполняем поиск в базе данных
+    // Execute search query in the database
     $searchResultQuery = "SELECT * FROM Books WHERE Title LIKE '%$searchQuery%' OR Author LIKE '%$searchQuery%' OR Publisher LIKE '%$searchQuery%' OR Language LIKE '%$searchQuery%' OR Category LIKE '%$searchQuery%'";
     $searchResult = $db->query($searchResultQuery);
 } else {
-    // Если запрос на поиск не был отправлен, перенаправляем пользователя на главную страницу
-    header("Location: /index.php");
+    // If no search query is set, redirect to the main page
+    
     exit();
 }
 ?>
@@ -28,71 +25,36 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['search_query'])) {
     <title>Search Results</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
-
-    
 </head>
 
 <body>
     <?php include_once "../includes/header.php"; ?>
 
-    <div class="container mt-3">
+    <div class="container mt-3 header-offset text-center">
         <h2>Search Results</h2>
 
-        <?php
-        // Вывод результатов поиска
-        if ($searchResult && $searchResult->num_rows > 0) {
-            echo "<table class='table'>
-                <thead>
-                    <tr>
-                        <th>BookID</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Publisher</th>
-                        <th>Image</th>
-                        <th>Status</th>";
-
-            // Если пользователь администратор, добавляем заголовки для административных действий
-            if ($isAdmin) {
-                echo "<th>Action</th>";
-            }
-
-            echo "</tr>
-                </thead>
-                <tbody>";
-
-            while ($row = $searchResult->fetch_assoc()) {
-                // Выводите результаты как вам удобно
-                echo "<tr>
-                        <td>{$row['BookID']}</td>
-                        <td>{$row['Title']}</td>
-                        <td>{$row['Author']}</td>
-                        <td>{$row['Publisher']}</td>
-                        <td><img src='../images/{$row['ImagePath']}' alt='{$row['Title']}' style='width: 150px; height: auto;'></td>
-                        <td>{$row['status']}</td>";
-
-                // Если пользователь администратор, добавляем административные действия
-                if ($isAdmin) {
-                    echo "<td>
-                            <a href='borrow_book.php?book_id={$row['BookID']}'>Borrow</a>
-                            <a href='return_book.php?book_id={$row['BookID']}'>Return</a>
-                            <a href='edit_book.php?book_id={$row['BookID']}'>Edit</a>
-                            <a href='delete_book.php?book_id={$row['BookID']}'>Delete</a>
-                          </td>";
+        <div class="row">
+            <?php
+            if ($searchResult && $searchResult->num_rows > 0) {
+                while ($row = $searchResult->fetch_assoc()) {
+                    echo "<div class='col-sm-12 card-center col-md-6 col-lg-4 mb-4'>";
+                    echo "<div class='card'>";
+                    echo "<div class='inner-card text-center'>";
+                    echo "<img src='../images/{$row['ImagePath']}' alt='{$row['Title']}' class='card-img-top img-fluid' style='max-width: 200px; height: 350px;'>";
+                    echo "<div class='card-body'>";
+                    echo "<h5 class='card-title'>{$row['Title']}</h5>";
+                    echo "<p class='card-text'>Author: {$row['Author']}<br>Publisher: {$row['Publisher']}<br>Status: {$row['status']}</p>";
+                    echo "</div></div></div></div>";
+                    echo "</div>";
                 }
-
-                echo "</tr>";
+            } else {
+                echo "<p class='lead'>No results found.</p>";
             }
-
-            echo "</tbody></table>";
-        } else {
-            echo "No results found.";
-        }
-        ?>
-
+            ?>
+        </div>
     </div>
 
     <?php include_once "../includes/footer.php"; ?>
-    <script src="../assets/js/admin_functions.js"></script>
 </body>
 
 </html>

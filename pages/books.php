@@ -103,16 +103,17 @@ $result = $db->query($query);
     <div class="container header-offset">
         <div class="row text-center mt-3">
 
-            <div class="col-12  ">
+            
                 <p class="some-text">Please login if you want to get a book!</p>
 
                 <!-- Display list of books -->
-                <div class="row text-center shadow">
+                <div class="row ">
                     <?php
                     // Loop through the result set and display book information
                     while ($row = $result->fetch_assoc()) {
-                        echo "<div class='col-sm-12 col-md-6 col-lg-4 mb-4 '>";
+                        echo "<div class='col-sm-12 card-center col-md-6 col-lg-4 mb-4 '>";
                         echo "<div class='card text-center'>";
+                        echo "<div class='inner-card'>";
                         echo "<img src='../images/{$row['ImagePath']}' alt='{$row['Title']}' class=' card-img-top img-fluid' style='max-width: 200px; height: 350px;'>";
                         echo "<div class='card-body'>";
                         echo "<h5 class='card-title'>{$row['Title']}</h5>";
@@ -121,10 +122,11 @@ $result = $db->query($query);
 
 
                         echo "</div></div></div></div>";
+                        echo "</div>";
                     }
                     ?>
                 </div>
-            </div>
+            
         </div>
     </div>
     <?php include_once "../includes/footer.php"; ?>

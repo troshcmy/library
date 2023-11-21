@@ -50,7 +50,7 @@ session_start();
             <h2>Fantasy</h2>
             <div class="row ">
                 <!-- Book 1 -->
-                <div class="col-xs-6 col-sm-6 col-md-4 mb-4">
+                <div class="col-xs-6 card-center col-sm-6 col-md-4 mb-4">
                     <div class="card">
                         <div class="inner-card"> <!-- Add this line -->
                             <img src="../images/61jgm6ooXzL._AC_UF1000,1000_QL80_.jpg" class="card-img-top" alt="Fantasy Book 1">
@@ -63,7 +63,7 @@ session_start();
                     </div>
                 </div>
                 <!-- Book 2 -->
-                <div class="col-xs-6 col-sm-6 col-md-4 mb-4">
+                <div class="col-xs-6 card-center col-sm-6 col-md-4 mb-4">
                     <div class="card">
                         <div class="inner-card"> <!-- Add this line -->
                             <img src="../images/The_Fellowship_of_the_Ring_cover.gif" class="card-img-top" alt="The Lord of The Rings">
@@ -77,7 +77,7 @@ session_start();
                 </div>
 
                 <!-- Book 3 -->
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-4 card-center">
                     <div class="card">
                         <div class="inner-card"> <!-- Add this line -->
                             <img src="../images/Harry_Potter_and_the_Prisoner_of_Azkaban.jpg" class="card-img-top" alt="Fantasy Book 3">
@@ -105,7 +105,7 @@ session_start();
                 <!-- description  -->
                 <div class="col-md-6 library-info ">
                     <div class="library-description-text text-left">
-                        <h3>Discover the Sydney Library:</h3>
+                        <h3>Discover the Sydney Library</h3>
                         <p>Step into the Sydney Library, an architectural marvel where each book tells a unique story. From gripping mysteries to insightful historical accounts, our collection spans diverse genres. The library ambiance, enriched with the subtle aroma of aged paper, invites you to explore literature's treasures. Engage in intellectual pursuits, attend literary events, or simply find solace in a cozy reading nook. Our dedicated staff ensures an unforgettable experience. Uncover hidden gems, forge connections with fellow book lovers, and let the Sydney Library be your gateway to a world of endless imagination.</p>
 
 
@@ -123,41 +123,48 @@ session_start();
             <h2>Mystery</h2>
             <div class="row">
                 <!-- Book 1 -->
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-4 card-center">
                     <div class="card">
-                        <img src="../images/Cover_(Hound_of_Baskervilles,_1902).jpg" class="card-img-top" alt="Mystery Book 1">
-                        <div class="card-body">
-                            <h5 class="card-title">The Hound of the Baskervilles</h5>
-                            <p class="card-text">Arthur Conan Doyle</p>
-                            <a href="./books.php" class="btn btn-primary">Details</a>
-                        </div>
+                        <div class="inner-card"> <!-- Add this line -->
+                            <img src="../images/Cover_(Hound_of_Baskervilles,_1902).jpg" class="card-img-top" alt="Mystery Book 1">
+                            <div class="card-body">
+                                <h5 class="card-title">The Hound of the Baskervilles</h5>
+                                <p class="card-text">Arthur Conan Doyle</p>
+                                <a href="./books.php" class="btn btn-primary">Details</a>
+                            </div>
+                        </div> <!-- Add this line -->
                     </div>
                 </div>
                 <!-- Book 2 -->
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-4 card-center">
                     <div class="card">
-                        <img src="../images/Gone_Girl_(Flynn_novel).jpg" class="card-img-top" alt="Mystery Book 2">
-                        <div class="card-body">
-                            <h5 class="card-title">Gone Girl</h5>
-                            <p class="card-text">Gillian Flynn</p>
-                            <a href="./books.php" class="btn btn-primary">Details</a>
-                        </div>
+                        <div class="inner-card"> <!-- Add this line -->
+                            <img src="../images/Gone_Girl_(Flynn_novel).jpg" class="card-img-top" alt="Mystery Book 2">
+                            <div class="card-body">
+                                <h5 class="card-title">Gone Girl</h5>
+                                <p class="card-text">Gillian Flynn</p>
+                                <a href="./books.php" class="btn btn-primary">Details</a>
+                            </div>
+                        </div> <!-- Add this line -->
                     </div>
                 </div>
                 <!-- Book 3 -->
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-4 card-center">
                     <div class="card">
-                        <img src="../images/DaVinciCode.jpg" class="card-img-top" alt="Mystery Book 3">
-                        <div class="card-body">
-                            <h5 class="card-title">The Da Vinci Code</h5>
-                            <p class="card-text">Dan Brown</p>
-                            <a href="./books.php" class="btn btn-primary">Details</a>
-                        </div>
+                        <div class="inner-card"> <!-- Add this line -->
+                            <img src="../images/DaVinciCode.jpg" class="card-img-top" alt="Mystery Book 3">
+                            <div class="card-body">
+                                <h5 class="card-title">The Da Vinci Code</h5>
+                                <p class="card-text">Dan Brown</p>
+                                <a href="./books.php" class="btn btn-primary">Details</a>
+                            </div>
+                        </div> <!-- Add this line -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
 
 
     <section class="library-description">
@@ -166,7 +173,7 @@ session_start();
                 <!-- description  -->
                 <div class="col-md-6 library-info">
                     <div class="library-description-text">
-                        <h3>Relaxation Oasis and Dining Delights:</h3>
+                        <h3>Relaxation Oasis and Dining Delights</h3>
                         <p>Indulge in tranquility at our Relaxation Oasis within the Sydney Library. Unwind amidst comfortable seating, surrounded by the soothing ambiance of literary wonders. Whether you seek a moment of reflection or lively discussions, this space caters to diverse needs. Refuel your energy with a delightful array of culinary delights available at our in-house cafe. Savor gourmet meals, snacks, and a variety of beverages. The library invites you to experience not only the joy of reading but also the pleasure of culinary exploration. Cherish moments of serenity, engage in vibrant conversations, and relish the fusion of literature and gastronomy at the Sydney Library.</p>
                     </div>
                 </div>
@@ -186,36 +193,42 @@ session_start();
             <h2>Science Fiction</h2>
             <div class="row justify-content-center">
                 <!-- Book 1 -->
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-4 card-center">
                     <div class="card">
-                        <img src="../images/Heretics_of_Dune-Frank_Herbert_(1984)_First_edition.jpg" class="card-img-top" alt="Science Fiction Book 1">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Dune</h5>
-                            <p class="card-text">Frank Herbert</p>
-                            <a href="./books.php" class="btn btn-primary">Details</a>
-                        </div>
+                        <div class="inner-card"> <!-- Add this line -->
+                            <img src="../images/Heretics_of_Dune-Frank_Herbert_(1984)_First_edition.jpg" class="card-img-top" alt="Science Fiction Book 1">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Dune</h5>
+                                <p class="card-text">Frank Herbert</p>
+                                <a href="./books.php" class="btn btn-primary">Details</a>
+                            </div>
+                        </div> <!-- Add this line -->
                     </div>
                 </div>
                 <!-- Book 2 -->
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-4 card-center">
                     <div class="card">
-                        <img src="../images/Ender's_game_cover_ISBN_0312932081.jpg" class="card-img-top" alt="Science Fiction Book 2">
-                        <div class="card-body">
-                            <h5 class="card-title">Ender's Game</h5>
-                            <p class="card-text">Orson Scott Card</p>
-                            <a href="./books.php" class="btn btn-primary">Details</a>
-                        </div>
+                        <div class="inner-card"> <!-- Add this line -->
+                            <img src="../images/Ender's_game_cover_ISBN_0312932081.jpg" class="card-img-top" alt="Science Fiction Book 2">
+                            <div class="card-body">
+                                <h5 class="card-title">Ender's Game</h5>
+                                <p class="card-text">Orson Scott Card</p>
+                                <a href="./books.php" class="btn btn-primary">Details</a>
+                            </div>
+                        </div> <!-- Add this line -->
                     </div>
                 </div>
                 <!-- Book 3 -->
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-4 card-center">
                     <div class="card">
-                        <img src="../images/H2G2_UK_front_cover.jpg" class="card-img-top" alt="Science Fiction Book 3">
-                        <div class="card-body">
-                            <h5 class="card-title">The Hitchhiker's Guide to the Galaxy</h5>
-                            <p class="card-text">Douglas Adams</p>
-                            <a href="./books.php" class="btn btn-primary">Details</a>
-                        </div>
+                        <div class="inner-card"> <!-- Add this line -->
+                            <img src="../images/H2G2_UK_front_cover.jpg" class="card-img-top" alt="Science Fiction Book 3">
+                            <div class="card-body">
+                                <h5 class="card-title">The Hitchhiker's Guide to the Galaxy</h5>
+                                <p class="card-text">Douglas Adams</p>
+                                <a href="./books.php" class="btn btn-primary">Details</a>
+                            </div>
+                        </div> <!-- Add this line -->
                     </div>
                 </div>
             </div>

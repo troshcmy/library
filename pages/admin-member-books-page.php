@@ -121,7 +121,7 @@ $result = $db->query($query);
                     <?php
                     // Loop through the result set and display book information
                     while ($row = $result->fetch_assoc()) {
-                        echo "<div class='col-sm-12 col-md-6 col-lg-4 mb-4'>";
+                        echo "<div class='col-sm-12 card-center col-md-6 col-lg-4 mb-4'>";
                         echo "<div class='card'>";
                         echo "<div class='inner-card'>";
                         echo "<img src='../images/{$row['ImagePath']}' alt='{$row['Title']}' class='card-img-top img-fluid' style='max-width: 200px; height: 350px;'>";
