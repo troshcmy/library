@@ -36,16 +36,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($_SESSION['user_type'] === 'Admin' || $_SESSION['user_type'] === 'Member') {
                 header("Location: ../pages/admin-member-books-page.php");
+                exit();
             } 
-            exit();
         } else {
-            echo "Incorrect password. Please try again.";
+            // Incorrect password
+            $_SESSION['login_error'] = "Incorrect password. Please try again.";
+            header("Location: ../pages/login.php");
+            exit();
         }
     } else {
         // User not found
-        echo "User not found. Please try again.";
+        $_SESSION['login_error'] = "User not found. Please try again.";
+        header("Location: ../pages/login.php");
+        exit();
     }
-
+    
     $stmt->close();
     $db->close();
 }

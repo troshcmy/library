@@ -51,11 +51,11 @@ $result = $db->query($query);
             var url = (action === 'borrow') ? "../backend/process_borrow.php" :
                 (action === 'return') ? "../backend/process_return.php" :
                 (action === 'delete') ? "../backend/process_delete_book.php" : null;
-                console.log("Success!!!!!");
+            console.log("Success!!!!!");
             if (url) {
                 sendAjaxRequest(`${url}?book_id=${bookId}`, function(response) {
                     handleSuccess(response, action);
-                    
+
                 }, handleFailure);
             }
         }
@@ -90,8 +90,6 @@ $result = $db->query($query);
                 }, handleFailure);
             }
         }
-
-        
     </script>
 
     <!-- SweetAlert JS -->
@@ -152,6 +150,8 @@ $result = $db->query($query);
                         }
 
                         echo "</div></div></div></div>";
+                        // Close the inner-cards div
+                        echo "</div>";
                     }
                     ?>
                 </div>

@@ -1,5 +1,8 @@
 <?php
 session_start();
+header('Content-Type: application/json');
+// Include your database connection script
+
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Include your database connection code here if not already included
@@ -13,27 +16,23 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $deleteQuery = "DELETE FROM books WHERE BookID = ?";
         $deleteStatusQuery = "DELETE FROM bookstatus WHERE BookID = ?";
 
-        $stmtDelete = $db->prepare($deleteQuery);
-        $stmtStatusDelete = $db->prepare($deleteStatusQuery);
+        // Prepare and execute the queries
+        $stmt = $db->prepare($deleteQuery);
+        $stmt->bind_param("i", $bookId);
+        $result1 = $stmt->execute();
 
-        if ($stmtDelete && $stmtStatusDelete) {
-            // Bind the parameters
-            $stmtDelete->bind_param("i", $bookId);
-            $stmtStatusDelete->bind_param("i", $bookId);
+        $stmt = $db->prepare($deleteStatusQuery);
+        $stmt->bind_param("i", $bookId);
+        $result2 = $stmt->execute();
 
-            // Execute the statements
-            $deleteResult = $stmtDelete->execute();
-            $deleteStatusResult = $stmtStatusDelete->execute();
-
-            // Check if deletion was successful
-            if ($deleteResult && $deleteStatusResult) {
-                $response = ['status' => 'success'];
-            } else {
-                $response = ['status' => 'error', 'message' => 'Failed to delete the book.'];
-            }
+        // Check if the delete operations were successful
+        if ($result1 && $result2) {
+            // If successful, send a JSON response with status "success"
+            echo json_encode(['status' => 'success']);
         } else {
-            $response = ['status' => 'error', 'message' => 'Prepared statement failed.'];
+            // If not successful, send a JSON response with status "error"
+            echo json_encode(['status' => 'error']);
         }
-
+        
     }
 }

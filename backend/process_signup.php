@@ -30,7 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
 
         if ($emailCount > 0) {
-            echo "Email address is already associated with a user.";
+            // Email address is already associated with a user.
+            $response = ['success' => false, 'error' => 'user_exists'];
+            echo json_encode($response);
         } else {
             // Hash the password using password_hash
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -44,16 +46,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->bind_param("sssss", $memberType, $firstName, $lastName, $email, $hashedPassword);
                 if ($stmt->execute()) {
                     // User registration successful
-                    echo json_encode(['success' => true, 'message' => 'User registration successful!']);
+                    $response = ['success' => true, 'message' => 'User registration successful!', 'redirect' => '../pages/login.php'];
                 } else {
                     // User registration failed
-                    echo json_encode(['success' => false, 'message' => 'User registration failed. Please try again.']);
+                    $response = ['success' => false, 'message' => 'User registration failed. Please try again.'];
                 }
-                $stmt->close();
+                $stmt->close(); // Closing the statement here
             }
+
+            // Close the connection
+            $conn->close();
+
+            // Convert the response array to JSON and echo it
+            echo json_encode($response);
         }
     }
-
-    // Close the connection
-    $conn->close();
 }

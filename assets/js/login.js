@@ -24,4 +24,13 @@ document.addEventListener('DOMContentLoaded', function() {
       loginForm.submit();
     }
   });
+
+  function showError(message) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: message,
+    });
+  }
 });
+

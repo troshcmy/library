@@ -79,7 +79,7 @@ $loggedIn = isset($_SESSION['user_type']) ? $_SESSION['user_type'] == 'Admin' ||
                             <?php if ($loggedIn) : ?>
                                 <li class="nav-item">
                                     <form method="post">
-                                        <button type="submit" class=" btn-link logout text-white" name="logout">
+                                        <button type="submit" class="btn-link logout text-white" name="logout">
                                             <i class="bi bi-box-arrow-right"></i> Logout
                                         </button>
                                     </form>

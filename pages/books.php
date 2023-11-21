@@ -104,9 +104,7 @@ $result = $db->query($query);
         <div class="row text-center mt-3">
 
             <div class="col-12  ">
-                <h2>
-
-                </h2>
+                <p class="some-text">Please login if you want to get a book!</p>
 
                 <!-- Display list of books -->
                 <div class="row text-center shadow">

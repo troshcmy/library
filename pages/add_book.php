@@ -26,7 +26,7 @@ session_start();
             <h2 class="center">Add New Book</h2>
 
 
-            <form id="addBookForm" action="../backend/process_add_book.php" method="POST" enctype="multipart/form-data">
+            <form id="addBookForm" class="shadow-style" action="../backend/process_add_book.php" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title">Title:</label>
                     <input type="text" class="form-control" id="title" name="title">

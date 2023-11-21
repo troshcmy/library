@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <link rel="stylesheet" href="./style.css"> -->
   <title>Sign Up</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 
 <body>
@@ -25,16 +27,9 @@
       <div class="col-md-6 col-md-4 col-sm-12 right-section text-center">
         <!-- Right section for signup form -->
         <div class="login-container text-center">
-          <?php
-          if (isset($_GET['success']) && $_GET['success'] === 'true') {
-          ?>
-            <div class="alert alert-success">
-              Created successfully.
-            </div>
-          <?php
-          }
-          ?>
+          <div class="error"></div>
           <h2>Sign Up</h2>
+
           <form id="signup-form" action="../backend/process_signup.php" method="POST">
             <div class="form-group">
               <label for="first-name">First Name</label>
@@ -63,29 +58,53 @@
 
   <script>
     document.getElementById("signup-form").addEventListener("submit", function(event) {
-      event.preventDefault(); // Prevent the form from submitting in the traditional way
+      event.preventDefault(); // Prevent the form from submitting normally
 
-      var formData = new FormData(event.target);
+      const formData = new FormData(event.target);
 
-      fetch("./backend/process_signup.php", {
-          method: "POST",
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            // Registration successful
-            alert(data.message);
-          } else {
-            // Registration failed
-            document.getElementById("errorMessages").innerText = data.message;
+      $.ajax({
+        type: "POST",
+        url: "../backend/process_signup.php",
+        data: {
+          first_name: formData.get("first_name"),
+          last_name: formData.get("last_name"),
+          email: formData.get("email"),
+          password: formData.get("password")
+        },
+        cache: false,
+        success: function(data) {
+          try {
+            const response = JSON.parse(data);
+
+            if (response.success) {
+              if (response.redirect) {
+                window.location.href = response.redirect;
+              } else {
+                // Handle successful registration here
+              }
+            } else {
+              if (response.error === "user_exists") {
+                alert("User with this email already exists.");
+              } else {
+                alert("Registration failed. Please try again.");
+              }
+            }
+          } catch (error) {
+            console.error("Error parsing JSON response:", error);
+            alert("An unexpected error occurred. Please try again.");
           }
-        })
-        .catch(error => {
-          console.error("Error:", error);
-        });
+        },
+        error: function(xhr, status, error) {
+          console.error("Ajax request error:", xhr.responseText);
+          alert("An unexpected error occurred. Please try again.");
+        }
+      });
     });
   </script>
+
+  <script src="../assets/js/signUp.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
 </body>
 
