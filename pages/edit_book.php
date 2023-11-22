@@ -79,8 +79,8 @@ if (isset($_GET['book_id'])) {
 </head>
 
 <body>
-    <?php include_once "../includes/header.php"; 
-    
+    <?php include_once "../includes/header.php";
+
     if (isset($_SESSION['edit_success']) && $_SESSION['edit_success']) {
         echo "<script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -101,59 +101,59 @@ if (isset($_GET['book_id'])) {
         // Reset the edit_success variable
         $_SESSION['edit_success'] = false;
     }
-    
+
     ?>
 
-   
-    <div class="container mt-3">
+
+    <div class="container mt-3 header-offset text-center">
         <div id="messageContainer"></div>
         <h2>Edit Book</h2>
-        
-        <!-- ... (previous HTML code) ... -->
 
-<form id="editBookForm" action="edit_book.php" method="POST" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label for="title">Title:</label>
-        <input type="text" class="form-control" id="title" name="title" value="<?php echo $row['Title']; ?>">
-    </div>
-    <div class="mb-3">
-        <label for="author">Author:</label>
-        <input type="text" class="form-control" id="author" name="author" value="<?php echo $row['Author']; ?>">
-    </div>
-    <div class="mb-3">
-        <label for="publisher">Publisher:</label>
-        <input type="text" class="form-control" id="publisher" name="publisher" value="<?php echo $row['Publisher']; ?>">
-    </div>
-    <div class="mb-3">
-        <label for="language">Language:</label>
-        <select type="text" class="form-control" id="language" name="language">
-            <option value="Fiction" <?php if ($row['Language'] == 'Fiction') echo 'selected'; ?>>English</option>
-            <option value="Nonfiction" <?php if ($row['Language'] == 'Nonfiction') echo 'selected'; ?>>French</option>
-            <option value="Reference" <?php if ($row['Language'] == 'Reference') echo 'selected'; ?>>Mandarin</option>
-        </select>
-    </div>
-    <!-- Add more fields as needed -->
-    <div class="mb-3">
-        <label for="category">Category:</label>
-        <select class="form-control" id="category" name="category">
-            <option value="Fiction" <?php if ($row['Category'] == 'Fiction') echo 'selected'; ?>>Fiction</option>
-            <option value="Nonfiction" <?php if ($row['Category'] == 'Nonfiction') echo 'selected'; ?>>Nonfiction</option>
-            <option value="Reference" <?php if ($row['Category'] == 'Reference') echo 'selected'; ?>>Reference</option>
-        </select>
-    </div>
-    <div class="mb-3">
-        <label for="image">Image:</label>
-        <input type="file" class="form-control" id="image" name="image">
-        <img src="../images/<?php echo $row['ImagePath']; ?>" alt="<?php echo $row['Title']; ?>" style="width: 150px; height: auto;">
-    </div>
+        <div class="text-center edit-form  ">
 
-    <input type="hidden" name="book_id" value="<?php echo $bookId; ?>">
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-</form>
+            <form id="editBookForm" action="edit_book.php" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="title">Title:</label>
+                    <input type="text" class="form-control" id="title" name="title" value="<?php echo $row['Title']; ?>">
+                </div>
+                <div class="mb-3">
+                    <label for="author">Author:</label>
+                    <input type="text" class="form-control" id="author" name="author" value="<?php echo $row['Author']; ?>">
+                </div>
+                <div class="mb-3">
+                    <label for="publisher">Publisher:</label>
+                    <input type="text" class="form-control input-edit" id="publisher" name="publisher" value="<?php echo $row['Publisher']; ?>">
+                </div>
+                <div class="mb-3">
+                    <label for="language">Language:</label>
+                    <select type="text" class="form-control" id="language" name="language">
+                        <option value="Fiction" <?php if ($row['Language'] == 'Fiction') echo 'selected'; ?>>English</option>
+                        <option value="Nonfiction" <?php if ($row['Language'] == 'Nonfiction') echo 'selected'; ?>>French</option>
+                        <option value="Reference" <?php if ($row['Language'] == 'Reference') echo 'selected'; ?>>Mandarin</option>
+                    </select>
+                </div>
+                <!-- Add more fields as needed -->
+                <div class="mb-3">
+                    <label for="category">Category:</label>
+                    <select class="form-control" id="category" name="category">
+                        <option value="Fiction" <?php if ($row['Category'] == 'Fiction') echo 'selected'; ?>>Fiction</option>
+                        <option value="Nonfiction" <?php if ($row['Category'] == 'Nonfiction') echo 'selected'; ?>>Nonfiction</option>
+                        <option value="Reference" <?php if ($row['Category'] == 'Reference') echo 'selected'; ?>>Reference</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="image">Image:</label>
+                    <input type="file" class="form-control" id="image" name="image">
+                    <img src="../images/<?php echo $row['ImagePath']; ?>" class="edit-img" alt="<?php echo $row['Title']; ?>" style="width: 150px; height: auto;">
+                </div>
 
-<!-- ... (remaining HTML code) ... -->
+                <input type="hidden" name="book_id" value="<?php echo $bookId; ?>">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+        <!-- ... (remaining HTML code) ... -->
 
-        
+
     </div>
 
     <?php include_once "../includes/footer.php"; ?>

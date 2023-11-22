@@ -7,6 +7,8 @@ if (isset($_POST['logout'])) {
     exit();
 }
 
+
+
 $loggedIn = isset($_SESSION['user_type']) ? $_SESSION['user_type'] == 'Admin' || $_SESSION['user_type'] == 'Member' : false;
 ?>
 

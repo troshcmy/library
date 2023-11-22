@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $db->prepare($query);
             $stmt->bind_param('ssssss', $title, $author, $publisher, $language, $category, $imageName);
 
-            // ... (your validation and checks code)
+            
 
             if ($stmt->execute()) {
                 $db->commit();

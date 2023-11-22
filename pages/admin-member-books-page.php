@@ -129,7 +129,7 @@ $result = $db->query($query);
                         echo "<div class='col-sm-12 card-center col-md-6 col-lg-4 mb-4'>";
                         echo "<div class='card'>";
                         echo "<div class='inner-card'>";
-                        echo "<img src='../images/{$row['ImagePath']}' alt='{$row['Title']}' class='card-img-top img-fluid' style='max-width: 200px; height: 350px;'>";
+                        echo "<img src='../images/{$row['ImagePath']}' alt='{$row['Title']}' class='card-img-top' style=' height: 350px;'>";
                         echo "<div class='card-body'>";
                         echo "<h5 class='card-title'>{$row['Title']}</h5>";
                         echo "<p class='card-text'>Author: {$row['Author']}<br>Publisher: {$row['Publisher']}<br>Status: {$row['status']}</p>";
