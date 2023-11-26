@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return false;
     }
 
-    alert("Book added successfully!");
+    // alert("Book added successfully!");
 
     return true;
   }

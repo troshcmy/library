@@ -98,7 +98,7 @@ $loggedIn = isset($_SESSION['user_type']) ? $_SESSION['user_type'] == 'Admin' ||
                 </div>
             </div>
         </nav>
-        <script>
+        <!-- <script>
             // Get the current page URL
             var currentPageUrl = window.location.href;
 
@@ -113,7 +113,44 @@ $loggedIn = isset($_SESSION['user_type']) ? $_SESSION['user_type'] == 'Admin' ||
                     navLinks[i].classList.add('active');
                 }
             }
-        </script>
+        </script> -->
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the mobile menu button and the mobile menu itself
+            var mobileMenuButton = document.querySelector('.navbar-toggler');
+            var mobileMenu = document.querySelector('.navbar-collapse');
+
+            // Function to close the mobile menu
+            function closeMobileMenu() {
+                mobileMenuButton.classList.add('collapsed');
+                mobileMenu.classList.remove('show');
+            }
+
+            // Add a click event listener to the document
+            document.addEventListener('click', function (event) {
+                // Check if the clicked element is not part of the mobile menu
+                if (!mobileMenu.contains(event.target) && event.target !== mobileMenuButton) {
+                    // Close the mobile menu
+                    closeMobileMenu();
+                }
+            });
+
+            // Get the current page URL
+            var currentPageUrl = window.location.href;
+
+            // Get the navigation links
+            var navLinks = document.getElementsByClassName('nav-link');
+
+            // Loop through the navigation links
+            for (var i = 0; i < navLinks.length; i++) {
+                // If the navigation link URL matches the current page URL
+                if (navLinks[i].href === currentPageUrl) {
+                    // Add the "active" class to the navigation link
+                    navLinks[i].classList.add('active');
+                }
+            }
+        });
+    </script>
     </header>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

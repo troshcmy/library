@@ -45,7 +45,7 @@
             </div>
             <div class="form-group">
               <label for="password">Password</label>
-              <input type="password" class="form-control" id="password" name="password" required>
+              <input type="password" class="form-control" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
             </div>
             <button type="submit" class="btn btn-primary">Sign Up</button>
           </form>
@@ -103,7 +103,7 @@
   </script>
 
   <script src="../assets/js/signUp.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
 
 
 </body>

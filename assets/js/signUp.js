@@ -2,46 +2,45 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM LOADED");
 
   const signupForm = document.getElementById("signup-form");
-  const firstNameInput = document.getElementById("first-name");
-  const lastNameInput = document.getElementById("last-name");
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
-  // const retypePasswordInput = document.getElementById("retype-password");
 
   signupForm.addEventListener("submit", function (event) {
-    // Проверка на валидность имени и фамилии
-    if (
-      !isValidName(firstNameInput.value) ||
-      !isValidName(lastNameInput.value)
-    ) {
-      event.preventDefault();
-      alert("First and last names should contain valid alpha characters only.");
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    // Reset error messages
+    resetErrorMessages();
+
+    let validInput = false;
+
+    while (!validInput) {
+      const formData = new FormData(signupForm);
+
+      // Check the criteria for each field
+      if (!isValidName(formData.get("first_name")) || !isValidName(formData.get("last_name"))) {
+        displayErrorMessage("First and last names should contain valid alpha characters only.");
+      } else if (formData.get("first_name").length > 20 || formData.get("last_name").length > 20) {
+        displayErrorMessage("First and last names should be no more than 20 characters in length.");
+      } else if (!isValidEmail(formData.get("email"))) {
+        displayErrorMessage("Invalid email format");
+      } else {
+        let passwordValidation = isValidPassword(formData.get("password"));
+
+        // If password is valid, set validInput to true to exit the loop
+        if (typeof passwordValidation === "boolean" && passwordValidation) {
+          validInput = true;
+        } else {
+          displayErrorMessage(`Password does not meet the requirements.\n${passwordValidation}`);
+        }
+      }
+
+      // If not all criteria are met, break out of the loop and prevent form submission
+      if (!validInput) {
+        break;
+      }
     }
 
-    if (firstNameInput.value.length > 20 || lastNameInput.value.length > 20) {
-      event.preventDefault();
-      alert(
-        "First and last names should be no more than 20 characters in length."
-      );
-    }
-
-    if (!isValidEmail(emailInput.value)) {
-      event.preventDefault();
-      alert("Invalid email format");
-    }
-
-    // if (passwordInput.value !== retypePasswordInput.value) {
-    //   event.preventDefault();
-    //   alert("Password do not match");
-    // }
-
-    const passwordValidation = isValidPassword(passwordInput.value);
-
-    if (typeof passwordValidation === "string") {
-      event.preventDefault();
-
-      // Display the detailed message
-      alert(`Password does not meet the requirements.\n${passwordValidation}`);
+    // If all conditions are met, submit the form
+    if (validInput) {
+      signupForm.submit();
     }
   });
 
@@ -51,8 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function isValidEmail(email) {
-    const emailRegex =
-      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.(com|net|org|info|edu|gov|...)$/;
+    // Improved email regex
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }
 
@@ -71,9 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
       hasSpecialChars
     ) {
       return true;
-    }
-      
-    else {
+    } else {
       const errors = [];
       if (password.length < minLength) {
         errors.push("Password should be at least 8 characters long.");
@@ -91,7 +88,21 @@ document.addEventListener("DOMContentLoaded", function () {
         errors.push("Password should contain at least one special character.");
       }
 
-      return errors.join("\n");
+      // Display the errors in the HTML
+      displayErrorMessage(errors.join("<br>"));
+
+      // Return false if there are errors
+      return false;
     }
+  }
+
+  function displayErrorMessage(message) {
+    const errorMessageContainer = document.getElementById("error-message");
+    errorMessageContainer.innerHTML = message;
+  }
+
+  function resetErrorMessages() {
+    const errorMessageContainer = document.getElementById("error-message");
+    errorMessageContainer.innerHTML = "";
   }
 });

@@ -52,27 +52,27 @@ session_start();
                 <!-- Book 1 -->
                 <div class="col-xs-6 card-center col-sm-6 col-md-4 mb-4">
                     <div class="card">
-                        <div class="inner-card"> <!-- Add this line -->
+                        <div class="inner-card"> 
                             <img src="../images/61jgm6ooXzL._AC_UF1000,1000_QL80_.jpg" class="card-img-top" alt="Fantasy Book 1">
                             <div class="card-body">
                                 <h5 class="card-title">The Philosopher's Stone</h5>
                                 <p class="card-text">J.K. Rowling</p>
                                 <a href="./admin-member-books-page.php" class="btn btn-primary">Details</a>
                             </div>
-                        </div> <!-- Add this line -->
+                        </div> 
                     </div>
                 </div>
                 <!-- Book 2 -->
                 <div class="col-xs-6 card-center col-sm-6 col-md-4 mb-4">
                     <div class="card">
-                        <div class="inner-card"> <!-- Add this line -->
+                        <div class="inner-card"> 
                             <img src="../images/The_Fellowship_of_the_Ring_cover.gif" class="card-img-top" alt="The Lord of The Rings">
                             <div class="card-body">
                                 <h5 class="card-title">The Fellowship of the Ring</h5>
                                 <p class="card-text">J.R.R. Tolkien</p>
                                 <a href="./admin-member-books-page.php" class="btn btn-primary ">Details</a>
                             </div>
-                        </div> <!-- Add this line -->
+                        </div> 
                     </div>
                 </div>
 
@@ -200,7 +200,7 @@ session_start();
                             <div class="card-body text-center">
                                 <h5 class="card-title">Dune</h5>
                                 <p class="card-text">Frank Herbert</p>
-                                <a href="./books.php" class="btn btn-primary">Details</a>
+                                <a href="./admin-member-books-page.php" class="btn btn-primary">Details</a>
                             </div>
                         </div> <!-- Add this line -->
                     </div>
@@ -213,7 +213,7 @@ session_start();
                             <div class="card-body">
                                 <h5 class="card-title">Ender's Game</h5>
                                 <p class="card-text">Orson Scott Card</p>
-                                <a href="./books.php" class="btn btn-primary">Details</a>
+                                <a href="./admin-member-books-page.php" class="btn btn-primary">Details</a>
                             </div>
                         </div> <!-- Add this line -->
                     </div>
@@ -226,7 +226,7 @@ session_start();
                             <div class="card-body">
                                 <h5 class="card-title">The Hitchhiker's Guide to the Galaxy</h5>
                                 <p class="card-text">Douglas Adams</p>
-                                <a href="./books.php" class="btn btn-primary">Details</a>
+                                <a href="./admin-member-books-page.php" class="btn btn-primary">Details</a>
                             </div>
                         </div> <!-- Add this line -->
                     </div>

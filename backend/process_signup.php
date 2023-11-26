@@ -34,6 +34,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $response = ['success' => false, 'error' => 'user_exists'];
             echo json_encode($response);
         } else {
+            // Additional check for email format
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $response = ['success' => false, 'error' => 'invalid_email'];
+                echo json_encode($response);
+                return;
+            }
+        
             // Hash the password using password_hash
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
@@ -62,3 +69,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+?>
