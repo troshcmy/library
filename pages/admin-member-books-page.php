@@ -2,19 +2,19 @@
 
 session_start();
 
+$_SESSION['Member_id'];
 
 
 
 include_once "../includes/conn.php"; // Include your database connection file
 
-if(!isset($_SESSION['user_type'])) {
+if (!isset($_SESSION['user_type'])) {
     header("Location: ./login.php");
     exit();
 }
 
-// Fetch books from the database
-$query = "SELECT BookID, Title, Author, Publisher, ImagePath, status FROM Books";
-$result = $db->query($query);
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,7 +75,10 @@ $result = $db->query($query);
                 } else if (action === 'delete') {
                     alert("Book deleted successfully!");
                 }
-                window.location.reload();
+                // Add a delay before reloading the page
+                setTimeout(function() {
+                    window.location.reload();
+                }, 400); // Delay of 1 second
             } else {
                 alert("An error occurred. Please try again.");
             }
@@ -124,35 +127,47 @@ $result = $db->query($query);
                 <!-- Display list of books -->
                 <div class="row">
                     <?php
+                    // Query to get book information
+                    $queryBooks = "SELECT BookID, Title, Author, Publisher, ImagePath, status FROM Books";
+                    $resultBooks = $db->query($queryBooks);
+
                     // Loop through the result set and display book information
-                    while ($row = $result->fetch_assoc()) {
+                    while ($rowBooks = $resultBooks->fetch_assoc()) {
+                        // Query to check book status for the current user
+                        $queryStatus = "SELECT MemberID FROM BookStatus WHERE BookID = {$rowBooks['BookID']} AND MemberID = {$_SESSION['Member_id']}";
+                        $resultStatus = $db->query($queryStatus);
+                        $rowStatus = $resultStatus->fetch_assoc();
+
                         echo "<div class='col-sm-12 card-center col-md-6 col-lg-4 mb-4'>";
                         echo "<div class='card'>";
                         echo "<div class='inner-card'>";
-                        echo "<img src='../images/{$row['ImagePath']}' alt='{$row['Title']}' class='card-img-top' style=' height: 350px;'>";
+                        echo "<img src='../images/{$rowBooks['ImagePath']}' alt='{$rowBooks['Title']}' class='card-img-top' style=' height: 350px;'>";
                         echo "<div class='card-body'>";
-                        echo "<h5 class='card-title'>{$row['Title']}</h5>";
-                        echo "<p class='card-text'>Author: {$row['Author']}<br>Publisher: {$row['Publisher']}<br>Status: {$row['status']}</p>";
+                        echo "<h5 class='card-title'>{$rowBooks['Title']}</h5>";
+                        echo "<p class='card-text'>Author: {$rowBooks['Author']}<br>Publisher: {$rowBooks['Publisher']}<br>Status: {$rowBooks['status']}</p>";
                         echo "<div class='btn-group'>";
 
-                        // Display Borrow and Return buttons for Members
-                        if ($_SESSION['user_type'] == 'Member' && $row['status'] == 'Available') {
-                            echo "<button class='btn  btn-success' onclick='manageBook({$row['BookID']}, \"borrow\")'>Borrow</button>";
-                        } elseif ($_SESSION['user_type'] == 'Member' && $row['status'] == 'Onloan') {
-                            echo "<button class='btn return-btn btn-warning' onclick='manageBook({$row['BookID']}, \"return\")'>Return</button>";
-                        }
+                       // Display Borrow and Return buttons for Members
+                        if ($_SESSION['user_type'] == 'Member' && $rowBooks['status'] == 'Available') {
+                            echo "<button class='btn  btn-success' onclick='manageBook({$rowBooks['BookID']}, \"borrow\")'>Borrow</button>";
+                        } elseif ($_SESSION['user_type'] == 'Member' && $rowBooks['status'] == 'Onloan' && $rowStatus != null && $rowStatus['MemberID'] == $_SESSION['Member_id']) {
+                            echo "<button class='btn return-btn btn-warning' onclick='manageBook({$rowBooks['BookID']}, \"return\")'>Return</button>";
+                        } 
+
+
 
                         // Display Return button for Admin
-                        if ($_SESSION['user_type'] == 'Admin' && $row['status'] == 'Onloan') {
-                            echo "<button class='btn btn-warning' onclick='manageBook({$row['BookID']}, \"return\")'>Return</button>";
-                            echo "<span id='status-message-{$row['BookID']}'></span>";
+                        if ($_SESSION['user_type'] == 'Admin' && $rowBooks['status'] == 'Onloan') {
+                            echo "<button class='btn btn-warning' onclick='manageBook({$rowBooks['BookID']}, \"return\")'>Return</button>";
+                            echo "<span id='status-message-{$rowBooks['BookID']}'></span>";
                         }
 
                         // Display Edit and Delete buttons for Admin
                         if ($_SESSION['user_type'] == 'Admin') {
-                            echo "<button class='btn btn-info' onclick='editBook({$row['BookID']})'>Edit</button>";
-                            echo "<button class='btn btn-danger' onclick='deleteBook({$row['BookID']})'>Delete</button>";
+                            echo "<button class='btn btn-info' onclick='editBook({$rowBooks['BookID']})'>Edit</button>";
+                            echo "<button class='btn btn-danger' onclick='deleteBook({$rowBooks['BookID']})'>Delete</button>";
                         }
+
 
                         echo "</div></div></div></div>";
                         // Close the inner-cards div
