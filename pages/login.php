@@ -1,8 +1,12 @@
 <?php
 session_start(); // Start the session
 
+if (isset($_SESSION['message'])) {
+  echo $_SESSION['message'];
+  unset($_SESSION['message']); // Remove the message after displaying it
+}
 
-// Проверка наличия сообщения об ошибке в сессии
+// Check for a login error in the session
 $loginError = isset($_SESSION['login_error']) ? $_SESSION['login_error'] : '';
 unset($_SESSION['login_error']);
 
@@ -31,28 +35,31 @@ unset($_SESSION['login_error']);
       </div>
       <div class="col-md-6 col-md-4 col-sm-12 right-section text-center">
         <!-- Right section for login form -->
-        
-          <div class="login-container text-center">
-            <h2>Login</h2>
-            <form action="../backend/process_login.php" method="POST" id="login-form">
-              <div class="form-group mb-3 mt-3">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter email" name="Email">
-              </div>
-              <div class="form-group mb-3">
-                <label for="pwd">Password:</label>
-                <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="PasswordMD5Hash">
-              </div>
-              <div class="form-check mb-3">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="remember"> Remember me
-                </label>
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-            <p>Don't have an account? <a href="signUp.php">Sign up</a></p>
-          </div>
-        
+
+        <div class="login-container text-center">
+          <h2>Login</h2>
+          <form action="../backend/process_login.php" method="POST" id="login-form">
+            <?php
+            // Display the success message if it's set
+            if (isset($_SESSION['success_message'])) {
+              echo "<p class='text-success'>" . $_SESSION['success_message'] . "</p>";
+              unset($_SESSION['success_message']);
+            }
+            ?>
+            <div class="form-group mb-3 mt-3">
+              <label for="email">Email:</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter email" name="Email">
+            </div>
+            <div class="form-group mb-3">
+              <label for="pwd">Password:</label>
+              <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="PasswordMD5Hash">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+          <p class="logpage-link-signup">Don't have an account? <a href="signUp.php">Sign up</a></p>
+        </div>
+
       </div>
     </div>
   </div>

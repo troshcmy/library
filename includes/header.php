@@ -1,4 +1,6 @@
 <?php
+
+// session_start();
 // Logout logic
 if (isset($_POST['logout'])) {
     session_unset();

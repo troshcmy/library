@@ -2,7 +2,7 @@
 
 session_start();
 
-$_SESSION['Member_id'];
+
 
 
 
@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_type'])) {
     exit();
 }
 
-
+$_SESSION['Member_id'];
 
 ?>
 <!DOCTYPE html>

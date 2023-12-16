@@ -1,72 +1,50 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "root";
-$database = "library_system";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+session_start();
+$conn = new mysqli('localhost', 'root', 'root', 'library_system');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $firstName = $_POST['first_name'];
-    $lastName = $_POST['last_name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $firstName = trim(mysqli_real_escape_string($conn, $_POST['first-name']));
+    $lastName = trim(mysqli_real_escape_string($conn, $_POST['last-name']));
+    $email = trim(mysqli_real_escape_string($conn, $_POST['email']));
+    $password = trim(mysqli_real_escape_string($conn, $_POST['password']));
+    $confirmPassword = trim(mysqli_real_escape_string($conn, $_POST['confirm-password']));
 
-    // Example validation: Check if email already exists
-    $emailExistsQuery = "SELECT COUNT(*) FROM User WHERE Email = ?";
+    // Validate input
+    if (empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty($confirmPassword)) {
+        $_SESSION['error_message'] = 'Please fill in all fields.';
+        header('Location: ../pages/signUp.php');
+        exit;
+    }
 
-    // Use prepared statement for better security
-    if ($stmt = $conn->prepare($emailExistsQuery)) {
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $stmt->bind_result($emailCount);
-        $stmt->fetch();
-        $stmt->close();
+    if ($password != $confirmPassword) {
+        $_SESSION['error_message'] = 'Passwords do not match.';
+        header('Location: ../pages/signUp.php');
+        exit;
+    }
 
-        if ($emailCount > 0) {
-            // Email address is already associated with a user.
-            $response = ['success' => false, 'error' => 'user_exists'];
-            echo json_encode($response);
-        } else {
-            // Additional check for email format
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $response = ['success' => false, 'error' => 'invalid_email'];
-                echo json_encode($response);
-                return;
-            }
-        
-            // Hash the password using password_hash
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    // Check if email already exists
+    $user_check_query = "SELECT * FROM User WHERE Email = '$email' LIMIT 1";
+    $result = mysqli_query($conn, $user_check_query);
+    $user = mysqli_fetch_assoc($result);
 
-            // Insert data into the database
-            $insertQuery = "INSERT INTO User (MemberType, FirstName, LastName, Email, PasswordHash) VALUES (?, ?, ?, ?, ?)";
+    if ($user) {
+        $_SESSION['error_message'] = 'Email already exists.';
+        header('Location: ../pages/signUp.php');
+        exit;
+    }
 
-            // Use prepared statement for better security
-            if ($stmt = $conn->prepare($insertQuery)) {
-                $memberType = "Member"; // Set the member type here
-                $stmt->bind_param("sssss", $memberType, $firstName, $lastName, $email, $hashedPassword);
-                if ($stmt->execute()) {
-                    // User registration successful
-                    $response = ['success' => true, 'message' => 'User registration successful!', 'redirect' => '../pages/login.php'];
-                } else {
-                    // User registration failed
-                    $response = ['success' => false, 'message' => 'User registration failed. Please try again.'];
-                }
-                $stmt->close(); // Closing the statement here
-            }
+    // Encrypt the password
+    $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
 
-            // Close the connection
-            $conn->close();
+    // Define the insert query
+    $query = "INSERT INTO User (FirstName, LastName, Email, PasswordHash) VALUES ('$firstName', '$lastName', '$email', '$password_encrypted')";
 
-            // Convert the response array to JSON and echo it
-            echo json_encode($response);
-        }
+
+  
+    if (mysqli_query($conn, $query)) {
+        $_SESSION['success_message'] = 'Registration successful. Please log in.';
+        header('Location: ../pages/login.php');
+        exit;
     }
 }
 ?>

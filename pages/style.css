@@ -11,9 +11,43 @@
   box-sizing: border-box;
 }
 
+.error {
+  color: blue;
+  font-size: 22px;
+}
+
+
+
+
+
+
+
 
 
 @media screen and (max-width: 992px) {
+
+
+
+
+.img-signup {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  padding: 0;
+  border-radius: 15px;
+}
+
+.signup-container {
+  width: 70%;
+  height: auto;
+  padding: 20px;
+  background-color: #e4d3ff79;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.logpage-link-signup {
+  text-decoration: none;
+}
 
 
 
@@ -29,6 +63,8 @@
     align-items: center;
     padding: 15px 0;
   }
+
+ 
 
 
   .hero-bg {
@@ -592,6 +628,18 @@ input.form-control {
   margin: 0 auto;
   padding: 0;
   border-radius: 15px;
+}
+
+.signup-container {
+  width: 70%;
+  height: auto;
+  padding: 20px;
+  background-color: #e4d3ff79;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.logpage-link-signup {
+  text-decoration: none;
 }
 
 
